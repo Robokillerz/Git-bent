@@ -3,17 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>KRGBY + K2 + White String Art Generator</title>
+<title>KRGBY + K2 + White String Art — Full Complete App</title>
+
 <style>
 :root{
   --bg:#0f172a;
-  --panel:#111827;
   --text:#f8fafc;
   --muted:#cbd5e1;
   --accent:#2563eb;
   --accent2:#1d4ed8;
+  --danger:#b91c1c;
+  --ok:#16a34a;
 }
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   background:radial-gradient(circle at top,#1e3a8a 0,#0f172a 45%,#020617 100%);
@@ -22,7 +28,12 @@ body{
   text-align:center;
   overscroll-behavior:none;
 }
-h1{font-size:22px;margin:12px 8px 4px}
+
+h1{
+  font-size:22px;
+  margin:12px 8px 4px;
+}
+
 .small{
   max-width:980px;
   margin:4px auto 10px;
@@ -31,6 +42,7 @@ h1{font-size:22px;margin:12px 8px 4px}
   font-size:13px;
   line-height:1.35;
 }
+
 .controls{
   background:rgba(15,23,42,.96);
   border-top:1px solid rgba(255,255,255,.08);
@@ -38,6 +50,7 @@ h1{font-size:22px;margin:12px 8px 4px}
   padding:10px;
   box-shadow:0 8px 24px rgba(0,0,0,.25);
 }
+
 .row{
   display:flex;
   flex-wrap:wrap;
@@ -46,26 +59,44 @@ h1{font-size:22px;margin:12px 8px 4px}
   gap:8px;
   margin:8px auto;
 }
+
 .block{
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:2px;
 }
-label{color:#a5b4fc;font-size:11px}
-input,select,button{
+
+label{
+  color:#a5b4fc;
+  font-size:11px;
+}
+
+input,
+select,
+button{
   border-radius:8px;
   border:1px solid #334155;
   padding:7px;
   font-size:14px;
 }
-input[type="number"]{width:78px;text-align:center}
+
+input[type="number"]{
+  width:82px;
+  text-align:center;
+}
+
 input[type="file"]{
   max-width:94vw;
   background:#020617;
   color:var(--text);
 }
-select{background:#f8fafc;color:#020617}
+
+select{
+  background:#f8fafc;
+  color:#020617;
+}
+
 button{
   background:var(--accent);
   color:white;
@@ -73,21 +104,39 @@ button{
   cursor:pointer;
   font-weight:bold;
 }
-button:hover{background:var(--accent2)}
-button.danger{background:#b91c1c}
-button.danger:hover{background:#991b1b}
-button.ok{background:#16a34a}
-button.ok:hover{background:#15803d}
+
+button:hover{
+  background:var(--accent2);
+}
+
+button.danger{
+  background:var(--danger);
+}
+
+button.danger:hover{
+  background:#991b1b;
+}
+
+button.ok{
+  background:var(--ok);
+}
+
+button.ok:hover{
+  background:#15803d;
+}
+
 #status{
   font-weight:bold;
   margin:8px auto;
   color:#facc15;
 }
+
 .stageWrap{
   width:96vw;
-  max-width:760px;
+  max-width:960px;
   margin:14px auto;
 }
+
 .stage{
   width:100%;
   aspect-ratio:1/1;
@@ -99,23 +148,39 @@ button.ok:hover{background:#15803d}
   touch-action:none;
 }
 
-.stage.squareStage{
+.stage.squareStage,
+.stage.rectStage{
   border-radius:0;
 }
+
 canvas{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
 }
-#targetCanvas{z-index:1;opacity:1}
-#artCanvas{z-index:2;pointer-events:none}
-#pinCanvas{z-index:3;pointer-events:none}
+
+#targetCanvas{
+  z-index:1;
+  opacity:1;
+}
+
+#artCanvas{
+  z-index:2;
+  pointer-events:none;
+}
+
+#pinCanvas{
+  z-index:3;
+  pointer-events:none;
+}
+
 #output{
   width:94vw;
   max-width:900px;
   margin:12px auto 24px;
 }
+
 textarea{
   width:100%;
   height:210px;
@@ -127,11 +192,13 @@ textarea{
   font-family:monospace;
   resize:vertical;
 }
+
 .note{
   font-size:12px;
   color:#cbd5e1;
   margin-top:6px;
 }
+
 .swatches{
   display:flex;
   flex-wrap:wrap;
@@ -139,6 +206,7 @@ textarea{
   gap:8px;
   margin:8px auto;
 }
+
 .swatch{
   display:flex;
   flex-direction:column;
@@ -146,6 +214,7 @@ textarea{
   font-size:10px;
   color:#cbd5e1;
 }
+
 .chip{
   width:26px;
   height:20px;
@@ -154,37 +223,41 @@ textarea{
 }
 </style>
 </head>
+
 <body>
 
 <h1>KRGBY + K2 + White String Art Generator</h1>
+
 <div class="small">
-  Upload an image, crop it on the canvas, then generate a color string-art plan using Black, Red, Green, Blue, Yellow, a second Black detail pass, and a restrained White highlight pass.
+  Full complete single-file app with image upload/crop, circle canvas, square canvas, manually sized rectangle canvas,
+  KRGBY color passes, K2 detail pass, restrained white highlight pass, TXT/CSV/SVG exports, opacity control, and line-thickness control.
 </div>
 
 <div class="controls">
+
   <div class="row">
     <input type="file" id="fileInput" accept="image/*">
   </div>
 
   <div class="row">
     <div class="block">
-      <input id="pinCount" type="number" min="12" max="1200" value="260">
+      <input id="pinCount" type="number" min="12" max="1400" value="300">
       <label>Pins</label>
     </div>
 
     <div class="block">
-      <input id="maxLines" type="number" min="1" value="4200">
+      <input id="maxLines" type="number" min="1" value="4600">
       <label>Total Lines</label>
     </div>
 
     <div class="block">
-      <input id="candidates" type="number" min="2" value="190">
+      <input id="candidates" type="number" min="2" value="200">
       <label>Candidates</label>
     </div>
 
     <div class="block">
-      <input id="res" type="number" min="80" max="900" value="360">
-      <label>Solver Res</label>
+      <input id="res" type="number" min="80" max="900" value="380">
+      <label>Solver Width</label>
     </div>
 
     <div class="block">
@@ -194,7 +267,7 @@ textarea{
 
     <div class="block">
       <input id="renderOpacity" type="number" min="0.01" max="1" step="0.01" value="0.18">
-      <label>Render Opacity</label>
+      <label>Line Opacity</label>
     </div>
 
     <div class="block">
@@ -219,22 +292,33 @@ textarea{
         <option value="white">White canvas</option>
         <option value="black">Black canvas</option>
       </select>
-      <label>Canvas</label>
+      <label>Canvas Color</label>
     </div>
 
     <div class="block">
       <select id="canvasShape">
         <option value="circle">Circle</option>
         <option value="square">Square</option>
+        <option value="rect">Rectangle</option>
       </select>
       <label>Canvas Shape</label>
     </div>
 
     <div class="block">
+      <input id="canvasWide" type="number" min="200" max="1600" value="900">
+      <label>Rect Width</label>
+    </div>
+
+    <div class="block">
+      <input id="canvasHigh" type="number" min="200" max="1600" value="600">
+      <label>Rect Height</label>
+    </div>
+
+    <div class="block">
       <select id="candidateMode">
-        <option value="wide">Wide/chord-biased candidates</option>
-        <option value="random">Repo-style random candidates</option>
-        <option value="all">Scan all pins, slower</option>
+        <option value="wide">Wide/chord-biased</option>
+        <option value="random">Repo-style random</option>
+        <option value="all">Scan all pins</option>
       </select>
       <label>Candidate Mode</label>
     </div>
@@ -254,14 +338,17 @@ textarea{
       <input id="kShare" type="number" min="0" max="1" step="0.01" value="0.24">
       <label>K Share</label>
     </div>
+
     <div class="block">
       <input id="rgbShare" type="number" min="0" max="1" step="0.01" value="0.46">
       <label>RGBY Share</label>
     </div>
+
     <div class="block">
       <input id="k2Share" type="number" min="0" max="1" step="0.01" value="0.18">
       <label>K2 Share</label>
     </div>
+
     <div class="block">
       <input id="whiteShare" type="number" min="0" max="1" step="0.01" value="0.12">
       <label>White Share</label>
@@ -289,23 +376,27 @@ textarea{
   </div>
 
   <div id="status">Lines generated: 0</div>
+
 </div>
 
 <div class="stageWrap">
   <div class="stage" id="stage">
-    <canvas id="targetCanvas" width="720" height="720"></canvas>
-    <canvas id="artCanvas" width="720" height="720"></canvas>
-    <canvas id="pinCanvas" width="720" height="720"></canvas>
+    <canvas id="targetCanvas"></canvas>
+    <canvas id="artCanvas"></canvas>
+    <canvas id="pinCanvas"></canvas>
   </div>
-  <div class="note">Upload image should appear immediately. Drag to move. Pinch or mouse wheel to zoom. Generate uses the exact crop shown.</div>
+  <div class="note">
+    Upload an image. Drag to move it. Pinch or mouse wheel to zoom. Choose Circle, Square, or Rectangle before generating.
+  </div>
 </div>
 
 <div id="output">
-<textarea id="instructions" readonly placeholder="Instructions will appear here..."></textarea>
+  <textarea id="instructions" readonly placeholder="Instructions will appear here..."></textarea>
 </div>
 
 <script>
-const SIZE=720;
+let CW=720;
+let CH=720;
 
 const targetCanvas=document.getElementById('targetCanvas');
 const artCanvas=document.getElementById('artCanvas');
@@ -316,79 +407,146 @@ const actx=artCanvas.getContext('2d');
 const pctx=pinCanvas.getContext('2d');
 
 let img=null;
-let preview={x:0,y:0,scale:1};
+let preview={
+  x:0,
+  y:0,
+  scale:1
+};
+
 let pins=[];
 let lineCache=new Map();
 let running=false;
 let sequence=[];
 let svgLines=[];
 
-function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
-function val(id){return document.getElementById(id).value;}
+function clamp(v,a,b){
+  return Math.max(a,Math.min(b,v));
+}
+
+function val(id){
+  return document.getElementById(id).value;
+}
+
 function num(id,fallback){
   const n=parseFloat(document.getElementById(id).value);
   return Number.isFinite(n)?n:fallback;
 }
-function canvasBg(){return val('canvasMode')==='black'?'#000000':'#ffffff';}
 
-function isSquareMode(){
+function canvasBg(){
+  return val('canvasMode')==='black'?'#000000':'#ffffff';
+}
+
+function isCircle(){
+  return val('canvasShape')==='circle';
+}
+
+function isSquare(){
   return val('canvasShape')==='square';
 }
 
-function updateStageShape(){
-  if(isSquareMode()){
-    stage.classList.add('squareStage');
-  }else{
-    stage.classList.remove('squareStage');
-  }
+function isRect(){
+  return val('canvasShape')==='rect';
 }
 
 function updateStatus(extra=''){
   document.getElementById('status').textContent='Lines generated: '+sequence.length+(extra?' — '+extra:'');
 }
+
 function updateInstructions(full=false){
   updateStatus();
+
   const data=full?sequence:sequence.slice(-500);
-  instructions.value=data.map(s=>`${s.line}) ${s.color}: ${s.from} → ${s.to}`).join('\n');
+
+  instructions.value=data.map(s=>{
+    return `${s.line}) ${s.color}: ${s.from} → ${s.to}`;
+  }).join('\n');
 }
-function clearArtTransparent(){actx.clearRect(0,0,SIZE,SIZE);}
-function fillArtBackground(){
-  actx.clearRect(0,0,SIZE,SIZE);
-  actx.fillStyle=canvasBg();
-  actx.fillRect(0,0,SIZE,SIZE);
-}
-function hexToRgb(hex){
-  hex=hex.replace('#','');
-  const n=parseInt(hex,16);
-  return [(n>>16)&255,(n>>8)&255,n&255];
-}
-function rgbToHex(c){
-  return '#'+c.map(v=>Math.round(clamp(v,0,255)).toString(16).padStart(2,'0')).join('');
-}
-function luminance(r,g,b){return 0.299*r+0.587*g+0.114*b;}
 
 const THREADS={
-  K:{name:'K',hex:'#000000',rgb:[0,0,0]},
-  R:{name:'R',hex:'#e11d48',rgb:[225,29,72]},
-  G:{name:'G',hex:'#16a34a',rgb:[22,163,74]},
-  B:{name:'B',hex:'#2563eb',rgb:[37,99,235]},
-  Y:{name:'Y',hex:'#facc15',rgb:[250,204,21]},
-  K2:{name:'K2',hex:'#111111',rgb:[17,17,17]},
-  WHITE:{name:'WHITE',hex:'#ffffff',rgb:[255,255,255]}
+  K:{
+    name:'K',
+    hex:'#000000',
+    rgb:[0,0,0]
+  },
+  R:{
+    name:'R',
+    hex:'#e11d48',
+    rgb:[225,29,72]
+  },
+  G:{
+    name:'G',
+    hex:'#16a34a',
+    rgb:[22,163,74]
+  },
+  B:{
+    name:'B',
+    hex:'#2563eb',
+    rgb:[37,99,235]
+  },
+  Y:{
+    name:'Y',
+    hex:'#facc15',
+    rgb:[250,204,21]
+  },
+  K2:{
+    name:'K2',
+    hex:'#111111',
+    rgb:[17,17,17]
+  },
+  WHITE:{
+    name:'WHITE',
+    hex:'#ffffff',
+    rgb:[255,255,255]
+  }
 };
 
+function luminance(r,g,b){
+  return 0.299*r+0.587*g+0.114*b;
+}
+
+function updateCanvasDimensions(){
+  if(isRect()){
+    CW=clamp(Math.floor(num('canvasWide',900)),200,1600);
+    CH=clamp(Math.floor(num('canvasHigh',600)),200,1600);
+  }else{
+    CW=720;
+    CH=720;
+  }
+
+  targetCanvas.width=CW;
+  targetCanvas.height=CH;
+  artCanvas.width=CW;
+  artCanvas.height=CH;
+  pinCanvas.width=CW;
+  pinCanvas.height=CH;
+
+  stage.style.aspectRatio=CW+'/'+CH;
+  stage.style.maxWidth=Math.min(960,CW)+'px';
+
+  stage.classList.toggle('squareStage',isSquare());
+  stage.classList.toggle('rectStage',isRect());
+}
+
+function clearArtTransparent(){
+  actx.clearRect(0,0,CW,CH);
+}
+
+function fillArtBackground(){
+  actx.clearRect(0,0,CW,CH);
+  actx.fillStyle=canvasBg();
+  actx.fillRect(0,0,CW,CH);
+}
+
 function drawTarget(){
-  updateStageShape();
-  targetCanvas.style.display='block';
-  tctx.clearRect(0,0,SIZE,SIZE);
+  tctx.clearRect(0,0,CW,CH);
   tctx.fillStyle=canvasBg();
-  tctx.fillRect(0,0,SIZE,SIZE);
+  tctx.fillRect(0,0,CW,CH);
 
   tctx.save();
 
-  if(!isSquareMode()){
+  if(isCircle()){
     tctx.beginPath();
-    tctx.arc(SIZE/2,SIZE/2,SIZE*0.49,0,Math.PI*2);
+    tctx.arc(CW/2,CH/2,Math.min(CW,CH)*0.49,0,Math.PI*2);
     tctx.clip();
   }
 
@@ -403,52 +561,65 @@ function drawTarget(){
   }
 
   tctx.restore();
+
+  targetCanvas.style.display='block';
 }
 
 function makePins(){
-  const n=Math.max(12,Math.floor(num('pinCount',260)));
-  pins=[];
-  if(isSquareMode()){
+  updateCanvasDimensions();
 
-    const side=SIZE*0.94;
-    const left=(SIZE-side)/2;
-    const top=(SIZE-side)/2;
-    const perimeter=side*4;
+  const n=Math.max(12,Math.floor(num('pinCount',300)));
+
+  pins=[];
+
+  if(isCircle()){
+    const cx=CW/2;
+    const cy=CH/2;
+    const r=Math.min(CW,CH)*0.485;
 
     for(let i=0;i<n;i++){
+      const th=Math.PI*2*i/n-Math.PI/2;
 
-      const t=(i/n)*perimeter;
+      pins.push({
+        i,
+        x:cx+Math.cos(th)*r,
+        y:cy+Math.sin(th)*r
+      });
+    }
+  }else{
+    const margin=0.03;
+    const left=CW*margin;
+    const top=CH*margin;
+    const boxW=CW*(1-margin*2);
+    const boxH=CH*(1-margin*2);
+    const perimeter=2*boxW+2*boxH;
 
-      let x,y;
+    for(let i=0;i<n;i++){
+      const t=i/n*perimeter;
 
-      if(t<side){
+      let x;
+      let y;
+
+      if(t<boxW){
         x=left+t;
         y=top;
-      }else if(t<side*2){
-        x=left+side;
-        y=top+(t-side);
-      }else if(t<side*3){
-        x=left+side-(t-side*2);
-        y=top+side;
+      }else if(t<boxW+boxH){
+        x=left+boxW;
+        y=top+t-boxW;
+      }else if(t<2*boxW+boxH){
+        x=left+boxW-(t-boxW-boxH);
+        y=top+boxH;
       }else{
         x=left;
-        y=top+side-(t-side*3);
+        y=top+boxH-(t-2*boxW-boxH);
       }
 
-      pins.push({i,x,y});
+      pins.push({
+        i,
+        x,
+        y
+      });
     }
-
-  }else{
-
-    const cx=SIZE/2;
-    const cy=SIZE/2;
-    const r=SIZE*0.485;
-
-    for(let i=0;i<n;i++){
-      const theta=(Math.PI*2*i/n)-Math.PI/2;
-      pins.push({i,x:cx+Math.cos(theta)*r,y:cy+Math.sin(theta)*r});
-    }
-
   }
 
   lineCache.clear();
@@ -456,8 +627,9 @@ function makePins(){
 }
 
 function drawPins(){
-  pctx.clearRect(0,0,SIZE,SIZE);
+  pctx.clearRect(0,0,CW,CH);
   pctx.save();
+
   pctx.fillStyle=val('canvasMode')==='black'?'#e5e7eb':'#111827';
   pctx.strokeStyle=val('canvasMode')==='black'?'#111827':'#ffffff';
   pctx.lineWidth=1;
@@ -479,50 +651,56 @@ function drawPins(){
 }
 
 function resetArt(){
-  updateStageShape();
   running=false;
   sequence=[];
   svgLines=[];
   lineCache.clear();
+
+  updateCanvasDimensions();
   clearArtTransparent();
   drawTarget();
   makePins();
   updateInstructions(true);
 }
 
-function prepareTarget(res){
+function prepareTarget(solverW){
+  const rw=solverW;
+  const rh=Math.max(1,Math.round(solverW*CH/CW));
+
   const off=document.createElement('canvas');
-  off.width=res;
-  off.height=res;
+  off.width=rw;
+  off.height=rh;
+
   const o=off.getContext('2d',{willReadFrequently:true});
 
   o.fillStyle=canvasBg();
-  o.fillRect(0,0,res,res);
+  o.fillRect(0,0,rw,rh);
 
   o.save();
 
-  if(!isSquareMode()){
+  if(isCircle()){
     o.beginPath();
-    o.arc(res/2,res/2,res*0.49,0,Math.PI*2);
+    o.arc(rw/2,rh/2,Math.min(rw,rh)*0.49,0,Math.PI*2);
     o.clip();
   }
 
   if(img){
     o.drawImage(
       img,
-      preview.x*res/SIZE,
-      preview.y*res/SIZE,
-      img.width*preview.scale*res/SIZE,
-      img.height*preview.scale*res/SIZE
+      preview.x*rw/CW,
+      preview.y*rh/CH,
+      img.width*preview.scale*rw/CW,
+      img.height*preview.scale*rh/CH
     );
   }
 
   o.restore();
 
-  const raw=o.getImageData(0,0,res,res).data;
-  const target=new Float32Array(res*res*3);
-  const work=new Float32Array(res*res*3);
-  const mask=new Uint8Array(res*res);
+  const raw=o.getImageData(0,0,rw,rh).data;
+
+  const target=new Float32Array(rw*rh*3);
+  const work=new Float32Array(rw*rh*3);
+  const mask=new Uint8Array(rw*rh);
 
   const base=val('canvasMode')==='black'?0:255;
 
@@ -536,38 +714,38 @@ function prepareTarget(res){
     work[j*3+2]=base;
   }
 
-  if(isSquareMode()){
+  if(isCircle()){
+    const cx=rw/2;
+    const cy=rh/2;
+    const rad=Math.min(rw,rh)*0.49;
 
-    for(let y=0;y<res;y++){
-      for(let x=0;x<res;x++){
-        const j=y*res+x;
-        mask[j]=1;
+    for(let y=0;y<rh;y++){
+      for(let x=0;x<rw;x++){
+        const j=y*rw+x;
+        mask[j]=Math.hypot(x-cx,y-cy)<=rad?1:0;
       }
     }
-
   }else{
-
-    const cx=res/2;
-    const cy=res/2;
-    const rad=res*0.49;
-
-    for(let y=0;y<res;y++){
-      for(let x=0;x<res;x++){
-        const j=y*res+x;
-        const d=Math.hypot(x-cx,y-cy);
-        mask[j]=d<=rad?1:0;
-      }
-    }
-
+    mask.fill(1);
   }
 
-  return{target,work,mask,res};
+  return{
+    target,
+    work,
+    mask,
+    rw,
+    rh
+  };
 }
 
 function bresenham(x0,y0,x1,y1,w,h){
-  x0=Math.round(x0); y0=Math.round(y0);
-  x1=Math.round(x1); y1=Math.round(y1);
+  x0=Math.round(x0);
+  y0=Math.round(y0);
+  x1=Math.round(x1);
+  y1=Math.round(y1);
+
   const pts=[];
+
   let dx=Math.abs(x1-x0);
   let dy=Math.abs(y1-y0);
   let sx=x0<x1?1:-1;
@@ -575,32 +753,57 @@ function bresenham(x0,y0,x1,y1,w,h){
   let err=dx-dy;
 
   while(true){
-    if(x0>=0&&x0<w&&y0>=0&&y0<h)pts.push(y0*w+x0);
-    if(x0===x1&&y0===y1)break;
+    if(x0>=0&&x0<w&&y0>=0&&y0<h){
+      pts.push(y0*w+x0);
+    }
+
+    if(x0===x1&&y0===y1){
+      break;
+    }
+
     const e2=2*err;
-    if(e2>-dy){err-=dy;x0+=sx;}
-    if(e2<dx){err+=dx;y0+=sy;}
+
+    if(e2>-dy){
+      err-=dy;
+      x0+=sx;
+    }
+
+    if(e2<dx){
+      err+=dx;
+      y0+=sy;
+    }
   }
+
   return pts;
 }
 
-function linePixels(a,b,res){
-  const key=a<b?`${a}-${b}-${res}`:`${b}-${a}-${res}`;
-  if(lineCache.has(key))return lineCache.get(key);
-  if(lineCache.size>50000)lineCache.clear();
+function linePixels(a,b,rw,rh){
+  const key=a<b
+    ? `${a}-${b}-${rw}-${rh}`
+    : `${b}-${a}-${rw}-${rh}`;
+
+  if(lineCache.has(key)){
+    return lineCache.get(key);
+  }
+
+  if(lineCache.size>50000){
+    lineCache.clear();
+  }
 
   const p=pins[a];
   const q=pins[b];
+
   const pts=bresenham(
-    p.x/SIZE*res,
-    p.y/SIZE*res,
-    q.x/SIZE*res,
-    q.y/SIZE*res,
-    res,
-    res
+    p.x/CW*rw,
+    p.y/CH*rh,
+    q.x/CW*rw,
+    q.y/CH*rh,
+    rw,
+    rh
   );
 
   lineCache.set(key,pts);
+
   return pts;
 }
 
@@ -611,7 +814,7 @@ function circularDistance(a,b,n){
 
 function getCandidates(current){
   const n=pins.length;
-  const count=Math.max(2,Math.floor(num('candidates',190)));
+  const count=Math.max(2,Math.floor(num('candidates',200)));
   const minSkip=Math.max(0,Math.floor(num('minSkip',8)));
   const mode=val('candidateMode');
   const out=new Set();
@@ -621,7 +824,12 @@ function getCandidates(current){
   }
 
   if(mode==='all'){
-    for(let i=0;i<n;i++)if(ok(i))out.add(i);
+    for(let i=0;i<n;i++){
+      if(ok(i)){
+        out.add(i);
+      }
+    }
+
     return [...out];
   }
 
@@ -629,116 +837,141 @@ function getCandidates(current){
 
   while(out.size<Math.min(count,n-1) && guard<count*24){
     guard++;
+
     let to;
 
     if(mode==='wide'){
       const half=Math.floor(n/2);
       const spread=Math.floor(n*(0.10+Math.random()*0.40));
+
       to=(current+half+Math.floor((Math.random()*2-1)*spread)+n*4)%n;
     }else{
       to=Math.floor(Math.random()*n);
     }
 
     to=Math.floor(to);
-    if(ok(to))out.add(to);
+
+    if(ok(to)){
+      out.add(to);
+    }
   }
 
   if(out.size===0){
-    for(let i=0;i<n;i++)if(i!==current)out.add(i);
+    for(let i=0;i<n;i++){
+      if(i!==current){
+        out.add(i);
+      }
+    }
   }
 
   return [...out];
 }
 
-function pixelError(target,work,idx){
-  const r=idx*3;
-  const dr=target[r]-work[r];
-  const dg=target[r+1]-work[r+1];
-  const db=target[r+2]-work[r+2];
+function pixelError(target,work,pix){
+  const i=pix*3;
+
+  const dr=target[i]-work[i];
+  const dg=target[i+1]-work[i+1];
+  const db=target[i+2]-work[i+2];
+
   return dr*dr+dg*dg+db*db;
 }
 
-function whiteHighlightWeight(target,work,idx){
-  const r=idx*3;
-  const tl=luminance(target[r],target[r+1],target[r+2]);
-  const wl=luminance(work[r],work[r+1],work[r+2]);
-  if(tl<160)return 0.15;
-  if(tl>wl+12)return 1.35;
+function whiteWeight(target,work,pix){
+  const i=pix*3;
+
+  const tl=luminance(target[i],target[i+1],target[i+2]);
+  const wl=luminance(work[i],work[i+1],work[i+2]);
+
+  if(tl<160){
+    return 0.15;
+  }
+
+  if(tl>wl+12){
+    return 1.35;
+  }
+
   return 0.55;
 }
 
-function darkDetailWeight(target,work,idx){
-  const r=idx*3;
-  const tl=luminance(target[r],target[r+1],target[r+2]);
-  const wl=luminance(work[r],work[r+1],work[r+2]);
-  if(tl<wl-8)return 1.25;
-  return 0.55;
+function darkWeight(target,work,pix){
+  const i=pix*3;
+
+  const tl=luminance(target[i],target[i+1],target[i+2]);
+  const wl=luminance(work[i],work[i+1],work[i+2]);
+
+  return tl<wl-8?1.25:0.55;
 }
 
 function scoreLine(a,b,thread,prepared,amount){
-  const pts=linePixels(a,b,prepared.res);
-  if(!pts.length)return -Infinity;
+  const pts=linePixels(a,b,prepared.rw,prepared.rh);
 
   const target=prepared.target;
   const work=prepared.work;
   const mask=prepared.mask;
   const c=thread.rgb;
+
   let gain=0;
   let seen=0;
 
-  for(let i=0;i<pts.length;i++){
-    const pix=pts[i];
-    if(!mask[pix])continue;
-
-    const idx=pix*3;
-    const e0=pixelError(target,work,pix);
-
-    const nr=work[idx]*(1-amount)+c[0]*amount;
-    const ng=work[idx+1]*(1-amount)+c[1]*amount;
-    const nb=work[idx+2]*(1-amount)+c[2]*amount;
-
-    const dr=target[idx]-nr;
-    const dg=target[idx+1]-ng;
-    const db=target[idx+2]-nb;
-    const e1=dr*dr+dg*dg+db*db;
-
-    let improvement=e0-e1;
-
-    if(thread.name==='WHITE'){
-      improvement*=whiteHighlightWeight(target,work,pix);
+  for(const pix of pts){
+    if(!mask[pix]){
+      continue;
     }
 
-    if(thread.name==='K2' || thread.name==='K'){
-      improvement*=darkDetailWeight(target,work,pix);
+    const i=pix*3;
+
+    const e0=pixelError(target,work,pix);
+
+    const nr=work[i]*(1-amount)+c[0]*amount;
+    const ng=work[i+1]*(1-amount)+c[1]*amount;
+    const nb=work[i+2]*(1-amount)+c[2]*amount;
+
+    const dr=target[i]-nr;
+    const dg=target[i+1]-ng;
+    const db=target[i+2]-nb;
+
+    let improvement=e0-(dr*dr+dg*dg+db*db);
+
+    if(thread.name==='WHITE'){
+      improvement*=whiteWeight(target,work,pix);
+    }
+
+    if(thread.name==='K' || thread.name==='K2'){
+      improvement*=darkWeight(target,work,pix);
     }
 
     gain+=improvement;
     seen++;
   }
 
-  if(!seen)return -Infinity;
-  return gain/seen;
+  return seen?gain/seen:-Infinity;
 }
 
 function applyLine(a,b,thread,prepared,amount){
-  const pts=linePixels(a,b,prepared.res);
+  const pts=linePixels(a,b,prepared.rw,prepared.rh);
+
   const work=prepared.work;
   const mask=prepared.mask;
   const c=thread.rgb;
 
-  for(let i=0;i<pts.length;i++){
-    const pix=pts[i];
-    if(!mask[pix])continue;
-    const idx=pix*3;
-    work[idx]=work[idx]*(1-amount)+c[0]*amount;
-    work[idx+1]=work[idx+1]*(1-amount)+c[1]*amount;
-    work[idx+2]=work[idx+2]*(1-amount)+c[2]*amount;
+  for(const pix of pts){
+    if(!mask[pix]){
+      continue;
+    }
+
+    const i=pix*3;
+
+    work[i]=work[i]*(1-amount)+c[0]*amount;
+    work[i+1]=work[i+1]*(1-amount)+c[1]*amount;
+    work[i+2]=work[i+2]*(1-amount)+c[2]*amount;
   }
 }
 
 function drawLine(a,b,thread){
   const p=pins[a];
   const q=pins[b];
+
   let op=clamp(num('renderOpacity',0.18),0.01,1);
   let thickness=clamp(num('lineThickness',0.55),0.05,4);
 
@@ -760,65 +993,109 @@ function drawLine(a,b,thread){
   actx.lineTo(q.x,q.y);
   actx.stroke();
 
-  svgLines.push(`<line x1="${p.x.toFixed(2)}" y1="${p.y.toFixed(2)}" x2="${q.x.toFixed(2)}" y2="${q.y.toFixed(2)}" stroke="${thread.hex}" stroke-opacity="${op}" stroke-width="${thickness}" data-color="${thread.name}" />`);
+  svgLines.push(
+    `<line x1="${p.x.toFixed(2)}" y1="${p.y.toFixed(2)}" x2="${q.x.toFixed(2)}" y2="${q.y.toFixed(2)}" stroke="${thread.hex}" stroke-opacity="${op}" stroke-width="${thickness}" data-color="${thread.name}" />`
+  );
 }
 
 function buildPasses(total){
-  const mode=val('colorMode');
-
-  if(mode==='mono'){
-    return [
-      {thread:val('canvasMode')==='black'?THREADS.WHITE:THREADS.K, count:total}
+  if(val('colorMode')==='mono'){
+    return[
+      {
+        thread:val('canvasMode')==='black'?THREADS.WHITE:THREADS.K,
+        count:total
+      }
     ];
   }
 
   let k=Math.max(0,num('kShare',0.24));
   let rgb=Math.max(0,num('rgbShare',0.46));
   let k2=Math.max(0,num('k2Share',0.18));
-  let white=mode==='krgbyNoWhite'?0:Math.max(0,num('whiteShare',0.12));
+  let white=val('colorMode')==='krgbyNoWhite'
+    ? 0
+    : Math.max(0,num('whiteShare',0.12));
+
   const sum=Math.max(0.0001,k+rgb+k2+white);
 
-  k/=sum; rgb/=sum; k2/=sum; white/=sum;
+  k/=sum;
+  rgb/=sum;
+  k2/=sum;
+  white/=sum;
 
   const kCount=Math.floor(total*k);
   const rgbTotal=Math.floor(total*rgb);
   const k2Count=Math.floor(total*k2);
   const whiteCount=Math.max(0,total-kCount-rgbTotal-k2Count);
+  const each=Math.max(0,Math.floor(rgbTotal/4));
 
-  const colorEach=Math.max(0,Math.floor(rgbTotal/4));
   const passes=[];
 
-  if(kCount>0)passes.push({thread:THREADS.K,count:kCount});
-  if(colorEach>0){
-    passes.push({thread:THREADS.R,count:colorEach});
-    passes.push({thread:THREADS.G,count:colorEach});
-    passes.push({thread:THREADS.B,count:colorEach});
-    passes.push({thread:THREADS.Y,count:Math.max(0,rgbTotal-colorEach*3)});
+  if(kCount){
+    passes.push({
+      thread:THREADS.K,
+      count:kCount
+    });
   }
-  if(k2Count>0)passes.push({thread:THREADS.K2,count:k2Count});
-  if(whiteCount>0)passes.push({thread:THREADS.WHITE,count:whiteCount});
+
+  if(each){
+    passes.push({
+      thread:THREADS.R,
+      count:each
+    });
+
+    passes.push({
+      thread:THREADS.G,
+      count:each
+    });
+
+    passes.push({
+      thread:THREADS.B,
+      count:each
+    });
+
+    passes.push({
+      thread:THREADS.Y,
+      count:Math.max(0,rgbTotal-each*3)
+    });
+  }
+
+  if(k2Count){
+    passes.push({
+      thread:THREADS.K2,
+      count:k2Count
+    });
+  }
+
+  if(whiteCount){
+    passes.push({
+      thread:THREADS.WHITE,
+      count:whiteCount
+    });
+  }
 
   return passes.filter(p=>p.count>0);
 }
 
 async function generate(){
-  if(!img || running)return;
+  if(!img || running){
+    return;
+  }
 
   running=true;
+
   sequence=[];
   svgLines=[];
   lineCache.clear();
 
-  const n=Math.max(12,Math.floor(num('pinCount',260)));
-  if(n!==pins.length)makePins();
-
+  makePins();
   fillArtBackground();
+
   targetCanvas.style.display='none';
 
-  const solverRes=clamp(Math.floor(num('res',360)),80,900);
-  const totalLines=Math.max(1,Math.floor(num('maxLines',4200)));
-  const amountBase=clamp(num('subtractOpacity',0.075),0.001,1);
-  const prepared=prepareTarget(solverRes);
+  const solverWidth=clamp(Math.floor(num('res',380)),80,900);
+  const totalLines=Math.max(1,Math.floor(num('maxLines',4600)));
+  const baseAmount=clamp(num('subtractOpacity',0.075),0.001,1);
+  const prepared=prepareTarget(solverWidth);
   const passes=buildPasses(totalLines);
 
   let globalLine=0;
@@ -826,31 +1103,51 @@ async function generate(){
   for(let pi=0;pi<passes.length && running;pi++){
     const pass=passes[pi];
     const thread=pass.thread;
-    let amount=amountBase;
 
-    if(thread.name==='WHITE')amount*=0.50;
-    if(thread.name==='K2')amount*=0.70;
-    if(thread.name==='Y')amount*=0.78;
+    let amount=baseAmount;
+
+    if(thread.name==='WHITE'){
+      amount*=0.5;
+    }
+
+    if(thread.name==='K2'){
+      amount*=0.7;
+    }
+
+    if(thread.name==='Y'){
+      amount*=0.78;
+    }
 
     let current=Math.floor((pins.length/passes.length)*pi)%pins.length;
+
     const recent=[];
     const recentLimit=Math.max(20,Math.floor(pins.length*0.22));
 
     for(let local=0;local<pass.count && running;local++){
       let bestTo=-1;
       let bestScore=0;
+
       const candidateList=getCandidates(current);
 
-      for(let i=0;i<candidateList.length;i++){
-        const to=candidateList[i];
-        const key=current<to?`${thread.name}-${current}-${to}`:`${thread.name}-${to}-${current}`;
+      for(const to of candidateList){
+        const key=current<to
+          ? `${thread.name}-${current}-${to}`
+          : `${thread.name}-${to}-${current}`;
 
-        if(recent.includes(key))continue;
+        if(recent.includes(key)){
+          continue;
+        }
 
-        const sc=scoreLine(current,to,thread,prepared,amount);
+        const score=scoreLine(
+          current,
+          to,
+          thread,
+          prepared,
+          amount
+        );
 
-        if(sc>bestScore){
-          bestScore=sc;
+        if(score>bestScore){
+          bestScore=score;
           bestTo=to;
         }
       }
@@ -861,13 +1158,30 @@ async function generate(){
 
       const from=current;
       const to=bestTo;
-      const key=from<to?`${thread.name}-${from}-${to}`:`${thread.name}-${to}-${from}`;
 
-      applyLine(from,to,thread,prepared,amount);
-      drawLine(from,to,thread);
+      const key=from<to
+        ? `${thread.name}-${from}-${to}`
+        : `${thread.name}-${to}-${from}`;
+
+      applyLine(
+        from,
+        to,
+        thread,
+        prepared,
+        amount
+      );
+
+      drawLine(
+        from,
+        to,
+        thread
+      );
 
       recent.push(key);
-      while(recent.length>recentLimit)recent.shift();
+
+      while(recent.length>recentLimit){
+        recent.shift();
+      }
 
       current=to;
       globalLine++;
@@ -881,7 +1195,11 @@ async function generate(){
 
       if((globalLine&15)===0){
         updateStatus('working '+thread.name);
-        if((globalLine&63)===0)updateInstructions(false);
+
+        if((globalLine&63)===0){
+          updateInstructions(false);
+        }
+
         await new Promise(r=>requestAnimationFrame(r));
       }
     }
@@ -893,24 +1211,34 @@ async function generate(){
 }
 
 function makeTXT(){
-  if(sequence.length===0)return 'No string-art instructions generated yet.';
-  return sequence.map(s=>`${s.line}) ${s.color}: ${s.from} -> ${s.to}`).join('\n');
+  if(sequence.length===0){
+    return 'No string-art instructions generated yet.';
+  }
+
+  return sequence.map(s=>{
+    return `${s.line}) ${s.color}: ${s.from} -> ${s.to}`;
+  }).join('\n');
 }
 
 function makeCSV(){
   const rows=['Line,Color,From Pin,To Pin'];
-  sequence.forEach(s=>rows.push(`${s.line},"${s.color}",${s.from},${s.to}`));
+
+  sequence.forEach(s=>{
+    rows.push(`${s.line},"${s.color}",${s.from},${s.to}`);
+  });
+
   return rows.join('\n');
 }
 
 function makeSVG(){
+  const border=isCircle()
+    ? `<circle cx="${CW/2}" cy="${CH/2}" r="${Math.min(CW,CH)*0.485}" fill="none" stroke="${val('canvasMode')==='black'?'#fff':'#000'}" stroke-opacity="0.25" stroke-width="1"/>`
+    : `<rect x="${CW*0.03}" y="${CH*0.03}" width="${CW*0.94}" height="${CH*0.94}" fill="none" stroke="${val('canvasMode')==='black'?'#fff':'#000'}" stroke-opacity="0.25" stroke-width="1"/>`;
+
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}">
-<rect x="0" y="0" width="${SIZE}" height="${SIZE}" fill="${canvasBg()}"/>
-${isSquareMode()
-? `<rect x="${SIZE*0.03}" y="${SIZE*0.03}" width="${SIZE*0.94}" height="${SIZE*0.94}" fill="none" stroke="${val('canvasMode')==='black'?'#fff':'#000'}" stroke-opacity="0.25" stroke-width="1"/>`
-: `<circle cx="${SIZE/2}" cy="${SIZE/2}" r="${SIZE*0.485}" fill="none" stroke="${val('canvasMode')==='black'?'#fff':'#000'}" stroke-opacity="0.25" stroke-width="1"/>`
-}
+<svg xmlns="http://www.w3.org/2000/svg" width="${CW}" height="${CH}" viewBox="0 0 ${CW} ${CH}">
+<rect x="0" y="0" width="${CW}" height="${CH}" fill="${canvasBg()}"/>
+${border}
 ${svgLines.join('\n')}
 </svg>`;
 }
@@ -918,12 +1246,15 @@ ${svgLines.join('\n')}
 function download(name,text,type){
   const blob=new Blob([text],{type:type+';charset=utf-8'});
   const url=URL.createObjectURL(blob);
+
   const a=document.createElement('a');
   a.href=url;
   a.download=name;
   a.style.display='none';
+
   document.body.appendChild(a);
   a.click();
+
   setTimeout(()=>{
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
@@ -932,45 +1263,65 @@ function download(name,text,type){
 
 fileInput.addEventListener('change',e=>{
   const f=e.target.files && e.target.files[0];
-  if(!f)return;
 
-  const url=URL.createObjectURL(f);
-  const nextImg=new Image();
+  if(!f){
+    updateStatus('no image selected');
+    return;
+  }
 
-  nextImg.onload=()=>{
-    URL.revokeObjectURL(url);
-    img=nextImg;
+  const reader=new FileReader();
 
-    preview.scale=Math.max(SIZE/img.width,SIZE/img.height);
-    preview.x=(SIZE-img.width*preview.scale)/2;
-    preview.y=(SIZE-img.height*preview.scale)/2;
+  reader.onload=ev=>{
+    const nextImg=new Image();
 
-    sequence=[];
-    svgLines=[];
-    lineCache.clear();
+    nextImg.onload=()=>{
+      img=nextImg;
 
-    clearArtTransparent();
-    drawTarget();
-    makePins();
-    updateInstructions(true);
-    targetCanvas.style.display='block';
-    updateStatus('image loaded');
+      updateCanvasDimensions();
+
+      preview.scale=Math.max(CW/img.width,CH/img.height);
+      preview.x=(CW-img.width*preview.scale)/2;
+      preview.y=(CH-img.height*preview.scale)/2;
+
+      sequence=[];
+      svgLines=[];
+      lineCache.clear();
+
+      clearArtTransparent();
+      drawTarget();
+      makePins();
+      updateInstructions(true);
+      updateStatus('image loaded');
+    };
+
+    nextImg.onerror=()=>{
+      updateStatus('image failed to load');
+    };
+
+    nextImg.src=ev.target.result;
   };
 
-  nextImg.onerror=()=>{
-    URL.revokeObjectURL(url);
-    updateStatus('image failed to load');
+  reader.onerror=()=>{
+    updateStatus('file read failed');
   };
 
-  nextImg.src=url;
+  reader.readAsDataURL(f);
 });
 
 generateBtn.onclick=generate;
-stopBtn.onclick=()=>{running=false;updateStatus('stopping');};
-resetBtn.onclick=()=>{resetArt();};
+
+stopBtn.onclick=()=>{
+  running=false;
+  updateStatus('stopping');
+};
+
+resetBtn.onclick=()=>{
+  resetArt();
+};
 
 copyBtn.onclick=async()=>{
   const text=makeTXT();
+
   try{
     await navigator.clipboard.writeText(text);
   }catch(e){
@@ -981,39 +1332,103 @@ copyBtn.onclick=async()=>{
   }
 };
 
-txtBtn.onclick=()=>download('krgby-k2-white-string-art-instructions.txt',makeTXT(),'text/plain');
-csvBtn.onclick=()=>download('krgby-k2-white-string-art-instructions.csv',makeCSV(),'text/csv');
-svgBtn.onclick=()=>download('krgby-k2-white-string-art-preview.svg',makeSVG(),'image/svg+xml');
+txtBtn.onclick=()=>{
+  download(
+    'krgby-k2-white-string-art-instructions.txt',
+    makeTXT(),
+    'text/plain'
+  );
+};
 
-pinCount.onchange=()=>{if(!running)makePins();};
-canvasMode.onchange=()=>{if(!running)resetArt();};
-canvasShape.onchange=()=>{if(!running){updateStageShape();resetArt();}};
+csvBtn.onclick=()=>{
+  download(
+    'krgby-k2-white-string-art-instructions.csv',
+    makeCSV(),
+    'text/csv'
+  );
+};
+
+svgBtn.onclick=()=>{
+  download(
+    'krgby-k2-white-string-art-preview.svg',
+    makeSVG(),
+    'image/svg+xml'
+  );
+};
+
+pinCount.onchange=()=>{
+  if(!running){
+    makePins();
+  }
+};
+
+canvasMode.onchange=()=>{
+  if(!running){
+    resetArt();
+  }
+};
+
+canvasShape.onchange=()=>{
+  if(!running){
+    resetArt();
+  }
+};
+
+canvasWide.onchange=()=>{
+  if(!running && isRect()){
+    resetArt();
+  }
+};
+
+canvasHigh.onchange=()=>{
+  if(!running && isRect()){
+    resetArt();
+  }
+};
 
 let pointers=new Map();
 let startScale=1;
 let startX=0;
 let startY=0;
 let lastDist=0;
-let startCenter={x:0,y:0};
+let startCenter={
+  x:0,
+  y:0
+};
 
 function pointerPos(e){
   const r=stage.getBoundingClientRect();
+
   return{
-    x:(e.clientX-r.left)*SIZE/r.width,
-    y:(e.clientY-r.top)*SIZE/r.height
+    x:(e.clientX-r.left)*CW/r.width,
+    y:(e.clientY-r.top)*CH/r.height
   };
 }
-function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
-function midpoint(a,b){return{x:(a.x+b.x)/2,y:(a.y+b.y)/2};}
+
+function distance(a,b){
+  return Math.hypot(a.x-b.x,a.y-b.y);
+}
+
+function midpoint(a,b){
+  return{
+    x:(a.x+b.x)/2,
+    y:(a.y+b.y)/2
+  };
+}
 
 stage.addEventListener('pointerdown',e=>{
-  if(!img || running)return;
+  if(!img || running){
+    return;
+  }
+
   e.preventDefault();
   stage.setPointerCapture(e.pointerId);
+
   pointers.set(e.pointerId,pointerPos(e));
 
   if(pointers.size===2){
     const pts=[...pointers.values()];
+
     lastDist=distance(pts[0],pts[1]);
     startScale=preview.scale;
     startX=preview.x;
@@ -1023,11 +1438,15 @@ stage.addEventListener('pointerdown',e=>{
 },{passive:false});
 
 stage.addEventListener('pointermove',e=>{
-  if(!img || running || !pointers.has(e.pointerId))return;
+  if(!img || running || !pointers.has(e.pointerId)){
+    return;
+  }
+
   e.preventDefault();
 
   const old=pointers.get(e.pointerId);
   const now=pointerPos(e);
+
   pointers.set(e.pointerId,now);
 
   if(pointers.size===1){
@@ -1045,6 +1464,7 @@ stage.addEventListener('pointermove',e=>{
     const ratio=newScale/startScale;
 
     preview.scale=newScale;
+
     preview.x=startX+(c.x-startCenter.x)+(startCenter.x-startX)*(1-ratio);
     preview.y=startY+(c.y-startCenter.y)+(startCenter.y-startY)*(1-ratio);
 
@@ -1052,13 +1472,19 @@ stage.addEventListener('pointermove',e=>{
   }
 },{passive:false});
 
-function endPointer(e){pointers.delete(e.pointerId);}
+function endPointer(e){
+  pointers.delete(e.pointerId);
+}
+
 stage.addEventListener('pointerup',endPointer);
 stage.addEventListener('pointercancel',endPointer);
 stage.addEventListener('pointerleave',endPointer);
 
 stage.addEventListener('wheel',e=>{
-  if(!img || running)return;
+  if(!img || running){
+    return;
+  }
+
   e.preventDefault();
 
   const p=pointerPos(e);
@@ -1074,8 +1500,8 @@ stage.addEventListener('wheel',e=>{
   drawTarget();
 },{passive:false});
 
-updateStageShape();
 resetArt();
 </script>
 </body>
 </html>
+
